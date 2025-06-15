@@ -1,0 +1,357 @@
+body {
+	font-family: monospace, monospace;
+	overflow: hidden;
+
+	background-color: black;
+	color: white;
+
+	user-select: none;
+}
+
+#tabbar {
+	position: absolute;
+	top: 1vh;
+	left: 1vw;
+	right: 1vw;
+	bottom: 95vh;
+	padding-left: 8px;
+	border: 1px solid white;
+
+	display: flex;
+	align-items: center;
+	gap: 2px;
+}
+
+.editor-column {
+	position: absolute;
+	top: 6vh;
+	bottom: 1vh;
+	border: 1px solid white;
+
+	overflow-y: hidden;
+	overflow-x: auto;
+}
+
+.column-name {
+	margin: 3px;
+	padding-left: 3px;
+	border: 1px solid white;
+	
+	font-weight: bold;
+	text-align: center;
+
+	user-select: none;
+}
+
+.drag-bar {
+	position: absolute;
+	top: 6vh;
+	bottom: 1vh;
+	border: 1px solid white;
+	
+	cursor: grab;
+	background-color: black;
+	color: white;
+}
+
+.drag-bar:active {
+	cursor: grabbing;
+	background-color: white;
+	color: black;
+}
+
+.drag-bar-svg {
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	border: 0px;
+
+	color: white;
+}
+
+.item-list {
+	margin-left: 3px;
+	margin-right: 3px;
+	border: 1px solid white;
+
+	position: relative;
+	top: 1px;
+	bottom: 3px;
+}
+
+.text-input {
+	margin-left: 3px;
+	margin-bottom: 3px;
+	border: 1px solid white;
+
+	font-family: monospace;
+	background-color: black;
+	color: white;
+
+	user-select: none;
+}
+
+.text-input:focus {
+	outline: none;
+}
+
+.text-input:active {
+	border: 1px solid black;
+}
+
+.button {
+	margin-left: 3px;
+	margin-bottom: 3px;
+	border: 1px solid white;
+
+	font-family: monospace;
+	background-color: black;
+	color: white;
+
+	user-select: none;
+}
+
+.button:enabled:active {
+	background-color: white;
+	color: black;
+}
+
+.column-section-box {
+	display: flex;
+	flex-direction: column;
+
+	padding: 3px 3px 3px 0px;
+	
+	margin-left: 3px;
+	margin-right: 3px;
+	
+	overflow-y: hidden;
+	overflow-x: auto;
+	
+	white-space: nowrap;
+
+	border: 1px solid white;
+}
+
+.column-section-text {
+	margin-top: 8px;
+	
+	font-family: monospace;
+	font-weight: bold;
+	font-style: italic;
+}
+
+.copyable-text-block {
+	flex: 3;
+
+	margin-left: 3px;
+	margin-bottom: 3px;
+	border: 1px solid white;
+
+	overflow-x: hidden;
+	overflow-y: scroll;
+	
+	user-select: text;
+	overflow-wrap: break-word;
+	white-space: normal;
+}
+
+.column-big-list {
+	flex: 5;
+	margin: 0px 3px 3px 3px;
+	padding-top: 3px;
+	border: 1px solid white;	
+
+	display: grid;
+	grid-template-columns: auto;
+	grid-auto-rows: min-content;
+
+	overflow-x: auto;
+	overflow-y: scroll;
+}
+
+.exporter-list-item {
+	display: flex;
+	flex-direction: row;
+	
+	margin: 0px 3px 3px 3px;
+	border: 1px solid white;
+	
+	white-space: nowrap;
+
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+
+.exporter-list-button {
+	margin-top: 3px;
+}
+
+.long-list-name {
+	margin: 0px 3px 0px 3px;
+	white-space: nowrap;
+}
+
+.file-item {
+	display: flex;
+	flex-direction: row;
+	white-space: nowrap;
+	margin: 0px 0px 3px 5%;
+}
+
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+	margin-left: 1px;
+
+	border: none;
+	border-left: 1px solid white;
+}
+
+::-webkit-scrollbar-track {
+	background-color: black; 
+}
+ 
+::-webkit-scrollbar-thumb {
+	margin: 2px;
+	border: 1px solid white;
+	background-color: black;
+}
+
+::-webkit-scrollbar-thumb:active {
+	background-color: white;
+}
+
+.supported-file-list {
+	width: 5vw;
+	border: 1px solid white;
+
+	font-family: monospace;
+	background-color: black;
+	color: white;
+}
+
+select {
+	-webkit-appearance: none;
+	-webkit-border-radius: 0px;
+	-webkit-border: 1px solid white;
+}
+
+select, ::picker(select) {
+	appearance: base-select;
+	font-style: bold;
+	color: white;
+}
+
+select:open::picker-icon {
+	content: "-";
+}
+
+select::picker-icon {
+	content: "+";
+}
+
+option {
+	background-color: black;
+	color: white;
+}
+
+option:hover {
+	background-color: white;
+	color: black;
+}
+
+option:first-of-type {
+  border-radius: 0;
+}
+
+option:last-of-type {
+  border-radius: 0;
+}
+
+option:not(option:last-of-type) {
+  border-bottom: none;
+}
+
+option:disabled {
+	font-style: italic;
+	color: gray;
+}
+
+option:disabled:hover {
+	background-color: black;
+	color: gray;
+}
+
+option::checkmark {
+	order: 1;
+	margin-left: 3px;
+
+	content: "X";
+	font-weight: bold;
+	font-style: italic;
+}
+
+.editor-container {
+	display: flex;
+	flex-direction: column;
+
+	margin: 0px 3px 3px 3px;
+	width: calc(100% - 8px);
+	height: calc(100% - 3px);
+	border: 1px solid white;
+}
+
+.editor-tabs {
+	display: flex;
+	flex-direction: row;
+	flex: 3;
+
+	margin: 3px 3px 0px 3px;
+	border: 1px solid white;
+}
+
+.editor-tab {
+	display: flex;
+	flex-direction: row;
+
+	padding-top: 3px;
+	margin: 3px 0px 3px 3px;
+	border: 1px solid white;
+
+	background-color: black;
+	color: white;
+
+	overflow-x: auto;
+}
+
+.editor-tab:active {
+	background-color: white;
+	color: black;
+}
+
+.editor-files {
+	flex: 100;
+
+	margin: 3px;
+	width: calc(100% - 8px);
+	height: calc(100% - 3px);
+	border: 1px solid white;
+}
+
+.editor-file {
+	left: 3px;
+	top: 3px;
+	width: calc(100% - 6px);
+	height: calc(100% - 6px);
+	border: none;
+
+	background-color: black;
+	color: white;
+	outline: none;
+
+	overflow-x: auto;
+	overflow-y: auto;
+}
+

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<!--
+	clean up code, make names make more sense, combine fileTree and treeDict
+-->
+
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>webtar</title>
+
+		<link rel="stylesheet" href="editor.css">
+	</head>
+
+	<body>
+		<div id="cloning-area" style="display: none;">
+			<div id="CLONE-drag-bar" class="drag-bar"></div>
+			<div id="CLONE-expanding-button" style="display: flex; flex-direction: row;">
+				<button class="button"></button>
+				<input 
+					type="text" 
+					class="text-input" 
+					style="display: none; width: 5vw;"
+
+					autocomplete="off"
+					autocorrect="off"
+					autocapitalize="off"
+					spellcheck="false"
+				/>
+
+				<button class="button" style="display: none;"></button>
+			</div>
+
+			<div id="CLONE-exporter-list-item" class="exporter-list-item">
+				<button class="button exporter-list-button">X</button>
+				<button class="button exporter-list-button">/\</button>
+				<button class="button exporter-list-button">\/</button>
+				<span class="long-list-name"></span>
+			</div>
+
+			<div id="CLONE-exporter-column" class="editor-column">
+				<div class="column-name">Exporter</div>
+
+				<span class="column-section-text">Exporting:</span>
+				<div style="display: flex; flex-direction: row;">
+					<span style="white-space: nowrap; user-select: none;">Title Name:</span>
+					<input 
+						type="text" 
+						class="text-input"
+						style="margin-right: 3px; display: flex; flex: 1; min-width: 1px;"
+						
+						autocomplete="off" 
+						autocorrect="off" 
+						autocapitalize="off" 
+						spellcheck="false"
+					/>
+				</div>
+				
+				<div style="display: flex;">
+					<button class="button" style="flex: 1; margin-right: 3px;">Export As Text</button>
+				</div>
+
+				<div class="column-section-box" style="flex: 1; display: none;">
+					<div style="display: flex;">
+						<button class="button" style="flex: 1;">X</button>
+						<button class="button" style="flex: 5;">Copy</button>
+					</div>
+					
+					<span class="copyable-text-block"></span>
+				</div>
+				
+				<span class="column-section-text">Export Order:</span>
+				<div class="column-big-list">
+					<div></div>
+				</div>
+			</div>
+
+			<div id="CLONE-folder-item">	
+				<div style="white-space: nowrap; display: flex; flex-direction: row;">
+					<span style="margin-left: 3px; font-weight: bold;"></span>
+					<span style="margin-left: 3px;"></span>
+					<div class="replace-expanding-button">Rename</div>
+					<button class="button">Copy Path</button>
+					<button class="button" style="display: none; margin-left: 8px;">X</button>
+					<button class="button" style="display: none;">/\</button>
+					<button class="button" style="display: none;">\/</button>
+				</div>
+				
+				<div>
+					<i style="margin-left: 5%;">Files</i>
+					<div style="margin-left: 5%;"></div>
+					<div style="margin-left: 5%; display: flex; flex-direction: row;">
+						<div class="replace-expanding-button">+</div>
+						<button class="button">Import</button>
+						<div class="replace-expanding-button">Move File Here</div>
+					</div>
+				</div>
+				
+				<hr>
+				<div>
+					<i style="margin-left: 5%;">Folders</i>
+					<div style="margin-left: 5%;"></div>
+					<div style="margin-left: 5%; display: flex; flex-direction: row;">
+						<div class="replace-expanding-button">+</div>
+						<button class="button">Import</button>
+						<div class="replace-expanding-button">Move Folder Here</div>
+					</div>
+				</div>
+			</div>
+
+			<select id="CLONE-supported-files" class="supported-file-list"></select>
+			<div id="CLONE-file-item" class="file-item">
+				<select class="supported-file-list"></select>
+				<span style="margin-left: 3px;"></span>
+				<div class="replace-expanding-button">Rename</div>
+				<button class="button">Copy Path</button>
+				
+				<button class="button" style="margin-left: 8px;">X</button>
+				<button class="button">/\</button>
+				<button class="button">\/</button>
+			</div>
+
+			<div id="CLONE-file-tree-column" class="editor-column">
+				<div class="column-name">File Tree</div>
+
+				<span class="column-section-text">Project File:</span>
+				<div style="display: flex; flex-direction: row; justify-content: center;">
+					<button class="button">Open</button>
+					<button class="button">Download</button>
+				</div>
+
+				<span class="column-section-text">File Tree:</span>
+				<div class="column-big-list"></div>
+			</div>
+
+			<div id="CLONE-editor-tab" class="editor-tab">
+				<span style="margin-left: 3px;"></span>
+				<button class="button" style="margin-left: 8px;">X</button>
+				<button class="button"><-</button>
+				<button class="button" style="margin-right: 3px;">-></button>
+			</div>
+
+			<!-- none for textarea (because it's just the textarea -->
+			<span id="CLONE-editor-font" style="text-align: center;">
+				The quick brown fox jumped over the lazy dog. <br>
+				., -- :; -- 0Oo -- 1lIiL
+			</span>
+			
+			<img id="CLONE-editor-image" style="max-width: 100%; height: auto;" />
+			<div id="CLONE-editor-audio">
+				<audio controls style="display: block; margin: 0 auto;"></audio>
+			</div>
+
+			<div id="CLONE-editor-column" class="editor-column">
+				<div class="column-name">Editor</div>
+				<div class="editor-container">
+					<div class="editor-tabs"></div>
+					<div class="editor-files"></div>
+				</div>
+			</div>
+		</div>
+		
+		<div id="main">
+			<div id="tabbar">
+				<span style="padding-right: 6px; user-select: none"><i>webtar</i></span>
+			</div>
+
+			<div id="editor-columns"></div>
+		</div>
+
+			<script src="js/columns.js"></script>
+			<script src="js/button.js"></script>
+			
+					<script src="js/file.js"></script>
+				<script src="js/folder.js"></script>
+				<script src="js/export.js"></script>
+				<script src="js/editor.js"></script>
+			<script src="js/file-tree.js"></script>
+		<script src="js/main.js"></script>
+	</body>
+</html>
+
