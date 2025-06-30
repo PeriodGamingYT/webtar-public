@@ -187,6 +187,7 @@ class File {
 		fileReader.addEventListener("load", () => {
 			this.data = new Uint8Array(fileReader.result)
 			this.setMime(fileBlob.type)
+			
 			// have to add edge case for ttf files
 			// since they aren't recognized by Blob
 			if(
