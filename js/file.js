@@ -174,7 +174,7 @@ class File {
 
 		if(genericMimeType != null) {
 			this.genericMime = genericMime
-			this.moreSpecificMime = fileBlob.type
+			this.moreSpecificMime = mime
 		}
 
 		this.fileTypeKey = fileType.name
