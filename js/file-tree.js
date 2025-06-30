@@ -123,8 +123,6 @@ class FileTree {
 
 		const fileTree = this
 		applyButtonListeners(this.openElement, () => {
-
-			// not available on firefox or safari, suck it! HAHA!
 			makeFileDialog(false, (fileHandles) => {
 				if(fileHandles.length <= 0) { return }
 				
