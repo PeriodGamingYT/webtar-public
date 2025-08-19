@@ -21,7 +21,7 @@ const textEditorInterface = {
 
 			textAreaElement.selectionStart = textAreaElement.selectionEnd = startIndex + 1
 		})
-		
+
 		return textAreaElement
 	},
 
@@ -57,7 +57,7 @@ const fontReaderInterface = {
 
 	fromBytes: (element, bytes, mime) => {
 		document.fonts.clear()
-		
+
 		let fontName = "custom-font-name-"
 		for(let i = 0; i < randomRange(5, 20); i++) {
 			fontName += randomCharacter()
@@ -66,7 +66,7 @@ const fontReaderInterface = {
 		const fileReader = new FileReader()
 		fileReader.addEventListener("load", () => {
 			const fontFace = new FontFace(
-				fontName, 
+				fontName,
 				`url(${fileReader.result})`
 			)
 
@@ -115,7 +115,7 @@ const audioReaderInterface = {
 	fromBytes: (element, bytes, mime) => {
 		const audioElement = element.children[0]
 		audioElement.setAttribute("type", mime)
-		
+
 		const blob = new Blob([bytes], { type: mime })
 		const fileReader = new FileReader()
 		fileReader.addEventListener("load", () => {
@@ -159,7 +159,7 @@ class EditorTab {
 		this.parentTabElement = null
 		this.parentFileElement = null
 		this.parentEditor = null
-		
+
 		this.editorTabElements = null
 		this.editorFileElement = null
 		this.tabIndex = -1
@@ -173,7 +173,7 @@ class EditorTab {
 		if(editorTab.treeDict != null) {
 			editorTab.saveFile()
 		}
-		
+
 		editorTab.parentEditor.closeTab(editorTab.tabIndex)
 	}
 
@@ -187,7 +187,7 @@ class EditorTab {
 
 	saveFile() {
 		if(this.treeDict == null) { return }
-		
+
 		const supportedFileTypes = this.parentEditor.fileTree.supportedFileTypes
 		const fileItem = this.treeDict[this.path].fileItem
 		const editorInterface = supportedFileTypes[fileItem.fileTypeKey].editorInterface
@@ -198,13 +198,13 @@ class EditorTab {
 
 	updatePath(newPath) {
 		if(this.treeDict == null) { return }
-		
+
 		this.path = newPath
 		this.editorTabElements.nameElement.innerHTML = newPath
 	}
 
 	setElements(
-		parentTabElement, 
+		parentTabElement,
 
 		// NOTE: parentFileElement doesn't need any replacement
 		// when swapping elements
@@ -226,20 +226,20 @@ class EditorTab {
 
 		this.editorFileElement = editorInterface.makeElement()
 		editorInterface.fromBytes(
-			this.editorFileElement, 
+			this.editorFileElement,
 			fileItem.data,
 			fileItem.getMime()
 		)
-		
+
 		this.editorFileElement.setAttribute("class", "editor-file")
 		this.editorFileElement.style.marginTop = "8px"
-		
+
 		this.parentFileElement.appendChild(this.editorFileElement)
 		parentEditor.tabs.push(this)
 		this.tabIndex = parentEditor.tabs.length - 1
 		this.parentEditor.setActiveTab(this.tabIndex)
 	}
-	
+
 	setVisibility(isVisible) {
 		this.editorFileElement.style.display = isVisible
 			? "inherit"
@@ -282,7 +282,7 @@ class Editor {
 		if(editorTab.treeDict != null) {
 			editorTab.treeDict[editorTab.path].editorTab = null
 		}
-		
+
 		const activeTabIndex = this.activeTabIndex
 		const isActiveTab = editorTab.tabIndex == activeTabIndex
 		editorTab.parentTabElement.removeChild(
@@ -307,8 +307,8 @@ class Editor {
 		}
 
 		for(
-			let i = tabIndex; 
-			i > -1 && i < this.tabs.length; 
+			let i = tabIndex;
+			i > -1 && i < this.tabs.length;
 			i++
 		) {
 			this.tabs[i].tabIndex = i
@@ -317,7 +317,7 @@ class Editor {
 		if(isActiveTab) {
 			this.activeTabIndex = -1
 			this.setActiveTab(Math.min(
-				this.tabs.length - 1, 
+				this.tabs.length - 1,
 				activeTabIndex
 			))
 		}
@@ -354,11 +354,17 @@ class Editor {
 			this.editorTabsElement.children[origIndex]
 		)
 
+		this.tabs[origIndex].tabIndex = offsetIndex
+		this.tabs[offsetIndex].tabIndex = origIndex
+
 		this.tabs[origIndex].applyListeners(origElement)
 		this.tabs[offsetIndex].applyListeners(offsetElement)
 
-		this.tabs[origIndex].tabIndex = offsetIndex
-		this.tabs[offsetIndex].tabIndex = origIndex
+		if(this.activeTabIndex == offsetIndex) {
+			this.activeTabIndex = origIndex
+		} else {
+			this.activeTabIndex = offsetIndex
+		}
 
 		const temp = this.tabs[origIndex]
 		this.tabs[origIndex] = this.tabs[offsetIndex]

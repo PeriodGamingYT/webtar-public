@@ -21,7 +21,7 @@ const getFileElements = (rootElement) => {
 			nameElement: rootElement.children[1],
 			renameElement: rootElement.children[2],
 			copyPathElement: rootElement.children[3],
-			
+
 			deleteElement: rootElement.children[4],
 			upElement: rootElement.children[5],
 			downElement: rootElement.children[6]
@@ -47,7 +47,7 @@ const makeFileElements = (parentElement, file) => {
 		if(fileType.isGeneric || file.genericMime != "") {
 			optionElement.setAttribute("disabled", "")
 		}
-		
+
 		elements.typeInputElement.appendChild(optionElement)
 	}
 
@@ -55,7 +55,7 @@ const makeFileElements = (parentElement, file) => {
 	if(file.genericMime != "") {
 		elements.typeInputElement.style.fontStyle = "italic"
 	}
-	
+
 	elements.nameElement.innerHTML = file.name
 	applyFileElementsListeners(elements, file)
 	return elements
@@ -75,11 +75,11 @@ class FileType {
 }
 
 class File {
-	constructor(name) { 
+	constructor(name) {
 
 		// this is needed in ExportList
 		this.isFile = true
-		
+
 		this.name = name
 		this.fileTypeKey = "text"
 
@@ -87,7 +87,7 @@ class File {
 		this.fileTree = null
 		this.elements = null
 		this.fileIndex = -1
-		
+
 		this.data = new Uint8Array(0);
 
 		this.path = ""
@@ -105,9 +105,15 @@ class File {
 
 	openTabListener(file) {
 		if(file.treeDict == null) { return }
-		
+
 		const treeDictItem = file.treeDict[file.path]
-		if(treeDictItem.editorTab != null) { return }
+		if(treeDictItem.editorTab != null) {
+			file.fileTree.editor.setActiveTab(
+				treeDictItem.editorTab.tabIndex
+			)
+
+			return
+		}
 
 		treeDictItem.editorTab = file.fileTree.editor.addTab(
 			new EditorTab(file.path, file.fileTree)
@@ -116,12 +122,12 @@ class File {
 
 	renameFileListener(userInput, file) {
 		if(!file.parentFolder.isNameValid(userInput)) { return }
-		
+
 		file.name = userInput
 		if(file.treeDict != null) {
 			file.updatePath(`${file.parentPath}/${file.name}`)
 		}
-		
+
 		file.elements.nameElement.innerHTML = userInput
 	}
 
@@ -187,11 +193,11 @@ class File {
 		fileReader.addEventListener("load", () => {
 			this.data = new Uint8Array(fileReader.result)
 			this.setMime(fileBlob.type)
-			
+
 			// have to add edge case for ttf files
 			// since they aren't recognized by Blob
 			if(
-				fileBlob.type == "" && 
+				fileBlob.type == "" &&
 				fileBlob.name.slice(-4) == ".ttf"
 			) {
 				this.genericMime = "font"
@@ -199,7 +205,7 @@ class File {
 				const fileType = this.fileTree.genericMimeToFileType["font"]
 				this.fileTypeKey = fileType.name
 			}
-		
+
 			afterLoaded()
 		}, false)
 
@@ -216,7 +222,7 @@ class File {
 	deletePath() {
 		if(this.treeDict == null) { return }
 		if(this.treeDict[this.path] == null) { return }
-		
+
 		const exportItem = this.treeDict[this.path].exportItem
 		if(exportItem != null) { exportItem.deleteExportItem() }
 
@@ -226,7 +232,7 @@ class File {
 				editorTab.tabIndex
 			)
 		}
-		
+
 		delete this.treeDict[this.path]
 		this.path = ""
 		this.treeDict = null
@@ -234,7 +240,7 @@ class File {
 
 	updatePath(newPath) {
 		if(this.treeDict == null) { return }
-		
+
 		const oldPath = this.path
 		this.path = newPath
 		this.treeDict[this.path] = this.treeDict[oldPath]
@@ -257,7 +263,7 @@ class File {
 		if(parentFolder != null) {
 			this.fileIndex = parentFolder.files.length
 		}
-			
+
 		this.elements = makeFileElements(parentElement, this)
 		if(parentFolder != null) {
 			parentFolder.files.push(this)

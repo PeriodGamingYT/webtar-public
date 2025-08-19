@@ -10,18 +10,18 @@ const makeExportItemElements = (parentElement, exportItem) => {
 		upElement: null,
 		downElement: null,
 		nameElement: null,
-		
+
 		rootElement: null
 	}
 
 	elements.rootElement = cloneElement("exporter-list-item", parentElement)
-	
+
 	elements.deleteElement = elements.rootElement.children[0]
 	elements.upElement = elements.rootElement.children[1]
 	elements.downElement = elements.rootElement.children[2]
 	elements.nameElement = elements.rootElement.children[3]
 	elements.nameElement.innerHTML = exportItem.path
-	
+
 	applyExportItemElementsListeners(elements, exportItem)
 	return elements
 }
@@ -63,7 +63,7 @@ class ExportItem {
 
 	updatePath(newPath) {
 		if(this.treeDict == null) { return }
-		
+
 		this.path = newPath
 		this.elements.nameElement.innerHTML = newPath
 	}
@@ -108,7 +108,7 @@ class ExportList {
 
 		this.titleName = "Untitled"
 		this.titleNameElement = column.columnElement.children[2].children[1]
-		
+
 		this.exportAsTextElement = column.columnElement.children[3].children[0]
 		this.exportDisplayElement = column.columnElement.children[4]
 			this.exportCloseElement = column.columnElement.children[4].children[0].children[0]
@@ -117,7 +117,7 @@ class ExportList {
 
 		this.exportListElement = column.columnElement.children[6].children[0]
 		this.exportResult = ""
-		
+
 		const exportList = this
 		this.exportListAddElement = addExpandingButton(
 			column.columnElement.children[6],
@@ -149,7 +149,7 @@ class ExportList {
 			this.treeDict[path] == null ||
 			!this.treeDict[path].isFile
 		) { return }
-		
+
 		const newExportItem = new ExportItem(this.treeDict, path)
 		newExportItem.setElements(this.exportListElement, this)
 	}
@@ -194,13 +194,13 @@ class ExportList {
 			const file = this.treeDict[item.path].fileItem
 			const editorTab = this.treeDict[item.path].editorTab
 			const fileType = this.fileTree.supportedFileTypes[file.fileTypeKey]
-			
+
 			if(!fileType.editorInterface.canChange) { continue }
 			if(editorTab != null) {
 				editorTab.saveFile()
 			}
 		}
-		
+
 		this.exportResult = (
 			"<!doctype html>\n" +
 			"<html>\n" +
@@ -214,7 +214,7 @@ class ExportList {
 		let exportParts = []
 		for(const itemIndex in this.items) {
 			exportParts.push(null)
-			
+
 			const item = this.items[itemIndex]
 			const file = this.treeDict[item.path].fileItem
 			const fileType = this.supportedFileTypes[file.fileTypeKey]
@@ -252,7 +252,7 @@ class ExportList {
 			for(const part of exportParts) {
 				exportList.exportResult += part
 			}
-			
+
 			exportList.exportResult += (
 				"</body>\n" +
 				"</html>\n" +
