@@ -362,7 +362,7 @@ class Editor {
 
 		if(this.activeTabIndex == offsetIndex) {
 			this.activeTabIndex = origIndex
-		} else {
+		} else if(this.activeTabIndex == origIndex) {
 			this.activeTabIndex = offsetIndex
 		}
 
