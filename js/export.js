@@ -190,6 +190,8 @@ class ExportList {
 
 	// can't just say export because that's reserved by js
 	exportEverything() {
+		this.exportTextBlockElement.innerText = ""
+
 		for(const item of this.items) {
 			const file = this.treeDict[item.path].fileItem
 			const editorTab = this.treeDict[item.path].editorTab
