@@ -208,7 +208,7 @@ class ExportList {
 			"<html>" +
 				"<head>" +
 					`<title>${this.titleName}</title>` +
-					`<meta charset="UTF-8">` +
+					`<meta charset="UTF-8" />` +
 				"</head>" +
 
 				"<body>"
