@@ -230,7 +230,10 @@ class ExportList {
 				)
 			})
 
-			const blob = new Blob([file.data], { type: mime })
+			const blob = new Blob([
+				new TextEncoder().encode(file.data)
+			], { type: mime })
+
 			fileReader.readAsDataURL(blob)
 		}
 
@@ -259,10 +262,9 @@ class ExportList {
 				"\n"
 			)
 
-			const blob = new Blob(
-				[new TextEncoder().encode(exportList.exportResult)],
-				{ type: "text/html" }
-			)
+			const blob = new Blob([
+				new TextEncoder().encode(exportList.exportResult)
+			], { type: "text/html;charset=utf-8" })
 
 			const fileReader = new FileReader()
 			fileReader.addEventListener("load", () => {

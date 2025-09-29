@@ -1,7 +1,7 @@
 class TreeDictFileItem {
 	constructor(fileItem) {
 		this.isFile = true
-		
+
 		this.fileItem = fileItem
 		this.exportItem = null
 		this.editorTab = null
@@ -18,12 +18,12 @@ class TreeDictFolderItem {
 
 class FileTree {
 	constructor(
-		fileTreeColumn, 
+		fileTreeColumn,
 		exporterColumn,
 		editorColumn
 	) {
 		this.treeDict = {}
-	
+
 		const fileTreeElement = fileTreeColumn.columnElement.children[4]
 		this.rootFolder = new Folder("root")
 
@@ -35,7 +35,7 @@ class FileTree {
 		this.setSupportedFileTypes(
 			new FileType(
 				"text", "Text", "text/plain",
-				textEditorInterface, 
+				textEditorInterface,
 				(dataUrl, bytes, mime, pathName) => {
 					const text = new TextDecoder().decode(bytes)
 					return (
@@ -43,10 +43,10 @@ class FileTree {
 					)
 				}
 			),
-			
+
 			new FileType(
 				"font", "Font", "font/*",
-				fontReaderInterface, 
+				fontReaderInterface,
 				(dataUrl, bytes, mime, pathName) => {
 					return (
 						"<style>\n" +
@@ -63,35 +63,33 @@ class FileTree {
 
 			new FileType(
 				"image", "Image", "image/*",
-				imageReaderInterface, 
+				imageReaderInterface,
 				(dataUrl, bytes, mime, pathName) => {
 					return (
 						`<img id="${pathName}" src="${dataUrl}" style="display: none;"/>`
 					)
 				}
 			),
-			
+
 			new FileType(
 				"audio", "Audio", "audio/*",
-				audioReaderInterface, 
+				audioReaderInterface,
 				(dataUrl, bytes, mime, pathName) => {
 					return `<audio id="${pathName}" style="display: none;" type="${mime}" src="${dataUrl}"></audio>`
 				}
 			),
 
-
-
 			new FileType(
 				"html", "HTML", "text/html",
-				textEditorInterface, 
+				textEditorInterface,
 				(dataUrl, bytes, mime, pathName) => {
 					return new TextDecoder().decode(bytes)
 				}
 			),
-			
+
 			new FileType(
 				"css", "CSS", "text/css",
-				textEditorInterface, 
+				textEditorInterface,
 				(dataUrl, bytes, mime, pathName) => {
 					const text = new TextDecoder().decode(bytes)
 
@@ -101,10 +99,10 @@ class FileTree {
 					)
 				}
 			),
-			
+
 			new FileType(
 				"js", "JS", "text/javascript",
-				textEditorInterface, 
+				textEditorInterface,
 				(dataUrl, bytes, mime, pathName) => {
 					return (
 						`<script src="${dataUrl}"></script>`
@@ -112,7 +110,7 @@ class FileTree {
 				}
 			)
 		)
-		
+
 		this.rootFolder.setElements(fileTreeElement, null, this)
 		this.rootFolder.connectPath(null)
 		this.exportList = new ExportList(exporterColumn, this)
@@ -125,7 +123,7 @@ class FileTree {
 		applyButtonListeners(this.openElement, () => {
 			makeFileDialog(false, (fileHandles) => {
 				if(fileHandles.length <= 0) { return }
-				
+
 				const fileReader = new FileReader()
 				fileReader.addEventListener("load", () => {
 					fileTree.jsonToFileTree(JSON.parse(fileReader.result))
@@ -139,11 +137,11 @@ class FileTree {
 			const aElement = document.createElement("a")
 			const url = URL.createObjectURL(
 				new Blob(
-					[JSON.stringify(this.fileTreeToJson())], 
+					[JSON.stringify(this.fileTreeToJson())],
 					{ type: "application/json" }
 				)
 			)
-			
+
 			aElement.setAttribute("href", url)
 			aElement.setAttribute("download", "export.json")
 			aElement.click()
@@ -155,7 +153,7 @@ class FileTree {
 	// 	titleName: string,
 	//
 	// 	exportItemsSize: int,
-	// 
+	//
 	// 	treeDict: {
 	// 		filePath: {
 	// 			fileIndex: int,
@@ -176,16 +174,16 @@ class FileTree {
 	fileTreeToJson() {
 		const result = {
 			titleName: this.exportList.titleName,
-			
+
 			exportItemsSize: 0,
-			
+
 			treeDict: {},
 			files: []
 		}
 
 		let filesSize = 0
 		for(
-			const [treeDictKey, treeDictItem] of 
+			const [treeDictKey, treeDictItem] of
 			Object.entries(this.treeDict)
 		) {
 			if(!treeDictItem.isFile) { continue }
@@ -194,7 +192,7 @@ class FileTree {
 				exportItemIndex: null,
 				editorTabIndex: null
 			}
-			
+
 			if(treeDictItem.exportItem != null) {
 				newTreeDictItem.exportItemIndex = treeDictItem.exportItem.itemIndex
 				result.exportItemsSize++
@@ -222,9 +220,9 @@ class FileTree {
 		} else {
 			this.exportList.titleName = ""
 		}
-		
+
 		this.exportList.titleNameElement.setAttribute(
-			"value", 
+			"value",
 			this.exportList.titleName
 		)
 
@@ -237,10 +235,10 @@ class FileTree {
 		for(let i = 0; i < foldersLength; i++) {
 			this.rootFolder.folders[0].deleteSelf()
 		}
-		
+
 		const exportPathOrder = new Array(json.exportItemsSize).fill(null)
 		for(
-			const [jsonTreeDictKey, jsonTreeDictItem] of 
+			const [jsonTreeDictKey, jsonTreeDictItem] of
 			Object.entries(json.treeDict)
 		) {
 			const jsonFile = json.files[jsonTreeDictItem.fileIndex]
@@ -297,14 +295,14 @@ class FileTree {
 			// if you do this then you suck!!!!!
 			return
 		}
-		
+
 		const pathParts = path.split("/")
 		if(pathParts[0] != this.rootFolder.name) {
 			return
 		}
 
 		file.name = pathParts[pathParts.length - 1]
-		
+
 		let pathIndex = 1
 		let pastPath = ""
 		let currentPath = `${this.rootFolder.name}`

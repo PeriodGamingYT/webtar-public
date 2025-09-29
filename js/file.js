@@ -3,7 +3,9 @@ const applyFileElementsListeners = (elements, file) => {
 		file["changeTypeListener"](event, file)
 	})
 
-	elements.nameElement.addEventListener("mouseup", (event) => {
+	// the pattern of releasing a button doing something is broken here,
+	// because it makes it awkward to open files
+	elements.nameElement.addEventListener("mousedown", (event) => {
 		file.openTabListener(file)
 	})
 
