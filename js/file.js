@@ -133,7 +133,7 @@ class File {
 
 	copyPathListener(file) {
 		if(file.treeDict == null) { return }
-		navigator.clipboard.writeText(file.path)
+		copyText(file.path)
 	}
 
 	deleteFileListener(file) {

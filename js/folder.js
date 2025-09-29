@@ -22,7 +22,7 @@ const applyFolderElementsListeners = (elements, folder) => {
 			elements.isOpen = !elements.isOpen
 			setFolderElementsVisibility(elements)
 		}
-		
+
 		elements.expansionIndicatorElement.addEventListener("mouseup", toggleVisibility)
 		elements.nameElement.addEventListener("mouseup", toggleVisibility)
 
@@ -37,7 +37,7 @@ const applyFolderElementsListeners = (elements, folder) => {
 		applyExpandingButtonListeners(elements.addFileElement, onClickExpandingWrapper("addFileListener", folder))
 		applyButtonListeners(elements.importFileElement, onClickWrapper("importFileListener", folder))
 		applyExpandingButtonListeners(elements.moveFileElement, onClickExpandingWrapper("moveFileListener", folder))
-	
+
 	// foldersContainerElement
 		applyExpandingButtonListeners(elements.addFolderElement, onClickExpandingWrapper("addFolderListener", folder))
 		applyButtonListeners(elements.importFolderElement, onClickWrapper("importFolderListener", folder))
@@ -53,11 +53,11 @@ const getFolderElements = (rootElement) => {
 				nameElement: rootElement.children[0].children[1],
 				renameElement: rootElement.children[0].children[2],
 				copyPathElement: rootElement.children[0].children[3],
-				
+
 				deleteElement: rootElement.children[0].children[4],
 				upElement: rootElement.children[0].children[5],
 				downElement: rootElement.children[0].children[6],
-			
+
 			filesContainerElement: rootElement.children[1],
 				filesElement: rootElement.children[1].children[1],
 				addFileElement: rootElement.children[1].children[2].children[0],
@@ -89,7 +89,7 @@ const makeFolderElements = (parentFolder, folder) => {
 	} else {
 		elements.rootElement.style.marginLeft = "5%"
 	}
-	
+
 	elements.nameElement.innerHTML = folder.name
 
 	// can't set it in html due to div replacement mechanism.
@@ -116,7 +116,7 @@ const makeFileDialog = (allowFolders, onReceived, allowMultiple = true) => {
 	if(allowMultiple) {
 		inputElement.setAttribute("multiple", "")
 	}
-	
+
 	if(allowFolders) {
 		inputElement.setAttribute("directory", "")
 		inputElement.setAttribute("webkitdirectory", "")
@@ -138,7 +138,7 @@ class Folder {
 
 		// this is needed in ExportList
 		this.isFile = false
-		
+
 		this.name = name
 		this.files = []
 		this.folders = []
@@ -180,7 +180,7 @@ class Folder {
 		fileItem.elements.rootElement.parentNode.removeChild(
 			fileItem.elements.rootElement
 		)
-		
+
 		fileItem.updatePath(
 			`${folder.path}/${treeDictItem.fileItem.name}`
 		)
@@ -223,7 +223,7 @@ class Folder {
 		folderItem.elements.rootElement.parentNode.removeChild(
 			folderItem.elements.rootElement
 		)
-		
+
 		folderItem.updatePath(
 			`${folder.path}/${treeDictItem.folderItem.name}`
 		)
@@ -246,13 +246,13 @@ class Folder {
 					: `${folder.parentPath}/${folder.name}`
 			)
 		}
-		
+
 		folder.elements.nameElement.innerHTML = userInput
 	}
 
 	copyPathListener(folder) {
 		if(folder.treeDict == null) { return }
-		navigator.clipboard.writeText(folder.path)
+		copyText(folder.path)
 	}
 
 	deleteFolderListener(folder) {
@@ -289,14 +289,14 @@ class Folder {
 		this.deletePath()
 		this.parentFolder.folders.splice(this.folderIndex, 1)
 	}
-	
+
 	addFile(file, addToExportList = true) {
 		file.setElements(
-			this.elements.filesElement, 
-			this, 
+			this.elements.filesElement,
+			this,
 			this.fileTree
 		)
-		
+
 		if(this.treeDict != null) {
 			file.connectPath(this.path)
 		}
@@ -308,11 +308,11 @@ class Folder {
 
 	addFolder(folder) {
 		folder.setElements(
-			this.elements.foldersElement, 
-			this, 
+			this.elements.foldersElement,
+			this,
 			this.fileTree
 		)
-		
+
 		if(this.treeDict != null) {
 			folder.connectPath(this.path)
 		}
@@ -356,7 +356,7 @@ class Folder {
 
 	updatePath(newPath) {
 		if(this.treeDict == null) { return }
-		
+
 		this.path = newPath
 		for(const file of this.files) {
 			file.updatePath(`${this.path}/${file.name}`)
@@ -373,8 +373,8 @@ class Folder {
 		if(parentFolder != null) {
 			this.folderIndex = parentFolder.folders.length
 		}
-		
-		this.elements = makeFolderElements(parentFolder, this)	
+
+		this.elements = makeFolderElements(parentFolder, this)
 		parentElement.appendChild(this.elements.rootElement)
 		if(parentFolder != null) {
 			parentFolder.folders.push(this)
@@ -394,12 +394,12 @@ class Folder {
 
 	relativeSwap(useFolders, origIndex, indexOffset) {
 		const array = useFolders ? this.folders : this.files
-		const parentElement = useFolders 
+		const parentElement = useFolders
 			? this.elements.foldersElement
 			: this.elements.filesElement
 
 		const offsetIndex = origIndex + indexOffset
-		if(	
+		if(
 			indexOffset == 0 ||
 			offsetIndex < 0 ||
 			offsetIndex > array.length - 1
@@ -424,9 +424,9 @@ class Folder {
 			array[offsetIndex].folderIndex = origIndex
 		} else {
 			array[origIndex].fileIndex = offsetIndex
-			array[offsetIndex].fileIndex = origIndex	
+			array[offsetIndex].fileIndex = origIndex
 		}
-		
+
 		const temp = array[origIndex]
 		array[origIndex] = array[offsetIndex]
 		array[offsetIndex] = temp

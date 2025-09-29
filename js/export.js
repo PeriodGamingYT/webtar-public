@@ -136,7 +136,7 @@ class ExportList {
 		})
 
 		applyButtonListeners(this.exportCopyElement, () => {
-			navigator.clipboard.writeText(exportList.exportResult)
+			copyText(exportList.exportResult)
 		})
 
 		applyButtonListeners(this.exportAsTextElement, () => {
