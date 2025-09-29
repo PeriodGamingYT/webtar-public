@@ -8,7 +8,7 @@ body {
 	user-select: none;
 }
 
-#tabbar {
+#tab-bar {
 	position: absolute;
 	top: 1vh;
 	left: 1vw;

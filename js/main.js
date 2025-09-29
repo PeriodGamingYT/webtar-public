@@ -1,8 +1,22 @@
 window.addEventListener("load", () => {
+	if(navigator.clipboard == null) {
+		const tabBar = document.getElementById("tab-bar")
+
+		const seperatorElement = document.createElement("span")
+		seperatorElement.style.paddingRight = "6px"
+		seperatorElement.innerText = " | "
+		tabBar.appendChild(seperatorElement)
+
+		const warningElement = document.createElement("span")
+		warningElement.style.color = "yellow"
+		warningElement.innerText = "Can't find navigator.clipboard, so no copy/paste!"
+		tabBar.appendChild(warningElement)
+	}
+
 	setupExpandingButtons()
 	const editorColumns = new EditorColumns(
 		"editor-columns",
-		
+
 		"exporter-column",
 		"file-tree-column",
 		"editor-column"
@@ -19,4 +33,3 @@ window.addEventListener("load", () => {
 })
 
 console.log("hello!")
-
