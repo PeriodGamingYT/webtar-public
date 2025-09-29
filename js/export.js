@@ -202,13 +202,14 @@ class ExportList {
 		}
 
 		this.exportResult = (
-			"<!doctype html>\n" +
-			"<html>\n" +
-				"<head>\n" +
-					`<title>${this.titleName}</title>\n` +
-				"</head>\n" +
-				"\n" +
-				"<body>\n"
+			"<!doctype html>" +
+			"<html>" +
+				"<head>" +
+					`<title>${this.titleName}</title>` +
+					`<meta charset="UTF-8">` +
+				"</head>" +
+
+				"<body>"
 		)
 
 		let exportParts = []
@@ -257,9 +258,8 @@ class ExportList {
 			}
 
 			exportList.exportResult += (
-				"</body>\n" +
-				"</html>\n" +
-				"\n"
+					"</body>" +
+				"</html>"
 			)
 
 			const blob = new Blob([
