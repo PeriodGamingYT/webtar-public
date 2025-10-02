@@ -233,9 +233,10 @@ class ExportList {
 				)
 			})
 
-			const blob = new Blob([
-				new TextEncoder().encode(file.data)
-			], { type: mime })
+			const blob = new Blob(
+				[ file.data ],
+				{ type: `${mime};charset=utf-8` }
+			)
 
 			fileReader.readAsDataURL(blob)
 		}
