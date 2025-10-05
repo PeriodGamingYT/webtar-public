@@ -202,6 +202,8 @@ class ExportList {
 		this.exportTextBlockElement.innerText = ""
 
 		for(const item of this.items) {
+			if(this.treeDict[item.path] == null) { continue }
+			
 			const file = this.treeDict[item.path].fileItem
 			const editorTab = this.treeDict[item.path].editorTab
 			const fileType = this.fileTree.supportedFileTypes[file.fileTypeKey]
