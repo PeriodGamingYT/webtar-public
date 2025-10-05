@@ -341,6 +341,7 @@ option::checkmark {
 
 	margin: 3px 3px 0px 3px;
 	border: 1px solid white;
+	padding-right: 3px;
 
 	overflow-x: auto;
 	overflow-y: hidden;
