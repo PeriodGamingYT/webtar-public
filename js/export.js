@@ -50,7 +50,7 @@ class ExportItem {
 	}
 
 	deleteExportItemListener(exportItem) {
-		exportItem.deleteExportItem()
+		exportItem.deleteSelf()
 	}
 
 	moveUpExportItemListener(exportItem) {
@@ -68,7 +68,16 @@ class ExportItem {
 		this.elements.nameElement.innerHTML = newPath
 	}
 
-	deleteExportItem() {
+	deleteSelf() {
+		if(
+			this.treeDict != null &&
+			this.treeDict[this.path] != null
+		) {
+			this.treeDict[this.path].exportItem = null
+			this.treeDict = null
+		}
+
+		this.path = ""
 		const parentNode = this.elements.rootElement.parentNode
 		if(parentNode != null) {
 			parentNode.removeChild(

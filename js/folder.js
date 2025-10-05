@@ -281,13 +281,18 @@ class Folder {
 	}
 
 	deleteSelf() {
-		if(this.elements.rootElement.parentNode == null) { return }
-		this.elements.rootElement.parentNode.removeChild(
-			this.elements.rootElement
-		)
-
 		this.deletePath()
+
+		if(this.elements.rootElement != null) {
+			this.elements.rootElement.parentNode.removeChild(
+				this.elements.rootElement
+			)
+		}
+
 		this.parentFolder.folders.splice(this.folderIndex, 1)
+		for(let i = this.folderIndex; i < this.parentFolder.folders.length; i++) {
+			this.parentFolder.folders[i].folderIndex = i
+		}
 	}
 
 	addFile(file, addToExportList = true) {
@@ -339,7 +344,11 @@ class Folder {
 	}
 
 	deletePath() {
-		if(this.treeDict == null) { return }
+		if(
+			this.treeDict == null ||
+			this.treeDict[this.path] == null
+		) { return }
+
 		for(const file of this.files) {
 			file.deletePath()
 		}
@@ -348,10 +357,10 @@ class Folder {
 			folder.deletePath()
 		}
 
-		delete this.treeDict[this.path]
-		this.path = ""
 		this.treeDict = null
 		this.fileTree = null
+
+		this.path = ""
 	}
 
 	updatePath(newPath) {

@@ -150,13 +150,46 @@ class File {
 		file.parentFolder.relativeSwap(false, file.fileIndex, 1)
 	}
 
-	deleteSelf() {
-		this.elements.rootElement.parentNode.removeChild(
-			this.elements.rootElement
-		)
+	deletePath() {
+		if(
+			this.treeDict == null ||
+			this.treeDict[this.path] == null
+		) {
+			this.treeDict = null
+			this.fileTree = null
+			this.path = null
+			return
+		}
 
+		const exportItem = this.treeDict[this.path].exportItem
+		if(exportItem != null) { exportItem.deleteSelf() }
+
+		const editorTab = this.treeDict[this.path].editorTab
+		if(editorTab != null) {
+			editorTab.parentEditor.closeTab(
+				editorTab.tabIndex
+			)
+		}
+
+		this.treeDict[this.path] = null
+		this.treeDict = null
+		this.fileTree = null
+		this.path = null
+	}
+
+	deleteSelf() {
 		this.deletePath()
+
+		if(this.elements.rootElement != null) {
+			this.elements.rootElement.parentNode.removeChild(
+				this.elements.rootElement
+			)
+		}
+
 		this.parentFolder.files.splice(this.fileIndex, 1)
+		for(let i = this.fileIndex; i < this.parentFolder.files.length; i++) {
+			this.parentFolder.files[i].fileIndex = i
+		}
 	}
 
 	getMime() {
@@ -219,25 +252,6 @@ class File {
 		this.treeDict = this.fileTree.treeDict
 		this.treeDict[this.path] = new TreeDictFileItem(this)
 		this.parentPath = parentPath
-	}
-
-	deletePath() {
-		if(this.treeDict == null) { return }
-		if(this.treeDict[this.path] == null) { return }
-
-		const exportItem = this.treeDict[this.path].exportItem
-		if(exportItem != null) { exportItem.deleteExportItem() }
-
-		const editorTab = this.treeDict[this.path].editorTab
-		if(editorTab != null) {
-			editorTab.parentEditor.closeTab(
-				editorTab.tabIndex
-			)
-		}
-
-		delete this.treeDict[this.path]
-		this.path = ""
-		this.treeDict = null
 	}
 
 	updatePath(newPath) {
