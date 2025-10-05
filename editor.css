@@ -183,6 +183,7 @@ body {
 	flex: 5;
 	margin: 0px 3px 3px 3px;
 	padding-top: 3px;
+	padding-right: 3px; /* for the scrollbar */
 	border: 1px solid white;
 
 	display: grid;
@@ -228,17 +229,22 @@ body {
 	margin-left: 1px;
 
 	border: none;
-	border-left: 1px solid white;
+	background-color: black;
 }
 
+/* stupid naming convention, this is where the scrollbar */
+/* handle ISN'T locatated */
 ::-webkit-scrollbar-track {
-	background-color: black;
+	background-color: lightgray;
 }
 
 ::-webkit-scrollbar-thumb {
-	margin: 2px;
-	border: 1px solid white;
-	background-color: black;
+	border: none;
+	background-color: gray;
+}
+
+::-webkit-scrollbar-track:active {
+	background-color: darkgray;
 }
 
 ::-webkit-scrollbar-thumb:active {
@@ -328,15 +334,23 @@ option::checkmark {
 .editor-tabs {
 	display: flex;
 	flex-direction: row;
-	flex: 3;
+	flex: 11;
 
 	margin: 3px 3px 0px 3px;
 	border: 1px solid white;
+
+	overflow-x: auto;
+	overflow-y: hidden;
 }
 
+/* css is trash sometimes */
 .editor-tab {
 	display: flex;
 	flex-direction: row;
+
+	flex: 1 0 auto;
+	width: max-content;
+	white-space: nowrap;
 
 	padding-top: 3px;
 	margin: 3px 0px 3px 3px;
@@ -345,10 +359,11 @@ option::checkmark {
 	background-color: black;
 	color: white;
 
-	overflow-x: auto;
+	overflow-x: hidden;
+	overflow-y: hidden;
 }
 
-.editor-tab:active {
+.editor-tab:active:not(:focus-within) {
 	background-color: white;
 	color: black;
 }

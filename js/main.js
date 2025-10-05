@@ -32,4 +32,8 @@ window.addEventListener("load", () => {
 	)
 })
 
+window.onbeforeunload = (event) => {
+	return "Once closed, unsaved changes will be lost"
+}
+
 console.log("hello!")
