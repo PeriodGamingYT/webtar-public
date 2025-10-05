@@ -334,7 +334,10 @@ option::checkmark {
 .editor-tabs {
 	display: flex;
 	flex-direction: row;
-	flex: 11;
+	flex: 1;
+
+	/* why is css like this? */
+	min-height: calc(1em + 6px + 6px + 3px + 1px + 1px);
 
 	margin: 3px 3px 0px 3px;
 	border: 1px solid white;
@@ -347,14 +350,17 @@ option::checkmark {
 .editor-tab {
 	display: flex;
 	flex-direction: row;
-
 	flex: 1 0 auto;
+
 	width: max-content;
-	white-space: nowrap;
+
+	/* thank you, css! */
+	min-height: calc(1em + 3px + 3px);
 
 	padding-top: 3px;
 	margin: 3px 0px 3px 3px;
 	border: 1px solid white;
+	white-space: nowrap;
 
 	background-color: black;
 	color: white;
