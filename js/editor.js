@@ -2,6 +2,12 @@ const textEditorInterface = {
 	canChange: true,
 	makeElement: () => {
 		const textAreaElement = document.createElement("textarea")
+
+		textAreaElement.setAttribute("autocomplete", "off")
+		textAreaElement.setAttribute("autocorrect", "off")
+		textAreaElement.setAttribute("autocapitalize", "off")
+		textAreaElement.setAttribute("spellcheck", "false")
+		
 		textAreaElement.addEventListener("keydown", (event) => {
 			if(event.key != "Tab") {
 				return

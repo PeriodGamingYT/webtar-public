@@ -14,7 +14,7 @@ const applyButtonListeners = (buttonElement, onClick) => {
 		if(event.button != 0) {
 			return
 		}
-		
+
 		onClick()
 	})
 }
@@ -48,7 +48,7 @@ const applyExpandingButtonListeners = (buttonContainerElement, onClick) => {
 		confirmButtonElement.style.display = "none"
 		textInputElement.style.display = "none"
 	}
-	
+
 	textInputElement.addEventListener("keyup", (event) => {
 		if(event.key != "Enter") {
 			return
@@ -61,15 +61,15 @@ const applyExpandingButtonListeners = (buttonContainerElement, onClick) => {
 		if(event.button != 0) {
 			return
 		}
-		
+
 		sendInput()
 	})
-	
+
 	buttonElement.addEventListener("mouseup", (event) => {
 		if(event.button != 0) {
 			return
 		}
-		
+
 		if(isPressed) {
 			isPressed = false
 			buttonElement.innerHTML = name
@@ -106,7 +106,7 @@ const setupExpandingButtons = () => {
 	for(let i = 0; i < length; i++) {
 		const element = document.getElementsByClassName("replace-expanding-button")[0]
 
-		// have to do it manually, .replaceChild doesn't work, can't copy over children 
+		// have to do it manually, .replaceChild doesn't work, can't copy over children
 		// and attributes from addExpandingButton
 		const name = element.innerHTML
 		element.setAttribute("class", "")
