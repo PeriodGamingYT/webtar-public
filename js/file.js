@@ -139,7 +139,11 @@ class File {
 	}
 
 	deleteFileListener(file) {
-		file.deleteSelf()
+		if(window.confirm(
+			`Confirming this dialog will delete the ${file.name} file (This is irreversible)!`
+		)) {
+			file.deleteSelf()
+		}
 	}
 
 	moveUpListener(file) {

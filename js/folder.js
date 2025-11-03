@@ -256,7 +256,11 @@ class Folder {
 	}
 
 	deleteFolderListener(folder) {
-		folder.deleteSelf()
+		if(window.confirm(
+			`Confirming this dialog will delete the ${folder.name} folder (This is irreversible)!`
+		)) {
+			folder.deleteSelf()
+		}
 	}
 
 	moveUpListener(folder) {
@@ -357,9 +361,9 @@ class Folder {
 			folder.deletePath()
 		}
 
+		this.treeDict[this.path] = null
 		this.treeDict = null
 		this.fileTree = null
-
 		this.path = ""
 	}
 

@@ -203,7 +203,7 @@ class ExportList {
 
 		for(const item of this.items) {
 			if(this.treeDict[item.path] == null) { continue }
-			
+
 			const file = this.treeDict[item.path].fileItem
 			const editorTab = this.treeDict[item.path].editorTab
 			const fileType = this.fileTree.supportedFileTypes[file.fileTypeKey]
@@ -226,10 +226,13 @@ class ExportList {
 		)
 
 		let exportParts = []
+		let files = []
 		for(const itemIndex in this.items) {
-			exportParts.push(null)
-
 			const item = this.items[itemIndex]
+			if(this.treeDict[item.path] == null) {
+				continue
+			}
+
 			const file = this.treeDict[item.path].fileItem
 			const fileType = this.supportedFileTypes[file.fileTypeKey]
 			const mime = file.getMime()
@@ -244,25 +247,33 @@ class ExportList {
 				)
 			})
 
-			const blob = new Blob(
-				[ file.data ],
-				{ type: `${mime};charset=utf-8` }
-			)
-
-			fileReader.readAsDataURL(blob)
+			exportParts.push(null)
+			files.push({
+				reader: fileReader,
+				blob: new Blob(
+					[ file.data ],
+					{ type: `${mime};charset=utf-8` }
+				)
+			})
 		}
 
 		const exportList = this
 		new Promise((resolve, reject) => {
 			const checkIfDone = () => {
-				for(const part of exportParts) {
-					if(part == null) {
-						window.requestAnimationFrame(checkIfDone)
-						return
-					}
+				if(files.length <= 0) {
+					resolve()
+					return
 				}
 
-				resolve()
+				if(files[0].reader.readyState == FileReader.EMPTY) {
+					files[0].reader.readAsDataURL(files[0].blob)
+				}
+
+				if(files[0].reader.readyState == FileReader.DONE) {
+					files.splice(0, 1)
+				}
+
+				window.requestAnimationFrame(checkIfDone)
 			}
 
 			checkIfDone()
