@@ -22,8 +22,10 @@ const hideCopyArea = () => {
 	copyAreaElement.style.display = "none"
 }
 
-copyAreaElement.addEventListener("keydown", (event) => {
-	if(event.key == "Escape") { hideCopyArea() }
-})
+document.addEventListener("load", () => {
+	copyAreaElement.addEventListener("keydown", (event) => {
+		if(event.key == "Escape") { hideCopyArea() }
+	})
 
-copyAreaElement.addEventListener("focusout", hideCopyArea)
+	copyAreaElement.addEventListener("focusout", hideCopyArea)
+})

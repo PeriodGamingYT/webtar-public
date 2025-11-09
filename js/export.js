@@ -74,10 +74,8 @@ class ExportItem {
 			this.treeDict[this.path] != null
 		) {
 			this.treeDict[this.path].exportItem = null
-			this.treeDict = null
 		}
 
-		this.path = ""
 		const parentNode = this.elements.rootElement.parentNode
 		if(parentNode != null) {
 			parentNode.removeChild(
@@ -85,7 +83,7 @@ class ExportItem {
 			)
 		}
 
-		for(let i = this.itemIndex; i < this.parentList.items.length; i++) {
+		for(let i = this.itemIndex + 1; i < this.parentList.items.length; i++) {
 			this.parentList.items[i].itemIndex = i - 1
 		}
 
@@ -156,6 +154,7 @@ class ExportList {
 	addItem(path) {
 		if(
 			this.treeDict[path] == null ||
+			this.treeDict[path].exportItem != null ||
 			!this.treeDict[path].isFile
 		) { return }
 
@@ -193,14 +192,13 @@ class ExportList {
 		const temp = this.items[origIndex]
 		this.items[origIndex] = this.items[offsetIndex]
 		this.items[offsetIndex] = temp
-
-		this.exportResult = ""
 	}
 
 	// can't just say export because that's reserved by js
 	exportEverything() {
 		this.exportTextBlockElement.innerText = ""
 
+console.log(this.items)
 		for(const item of this.items) {
 			if(this.treeDict[item.path] == null) { continue }
 
@@ -243,8 +241,10 @@ class ExportList {
 				})
 			})
 
+			console.log(`Added file reader for ${file.path}`)
 			files.push({
 				reader: fileReader,
+				path: file.path,
 				blob: new Blob(
 					[ file.data ],
 					{ type: `${mime};charset=utf-8` }
@@ -263,6 +263,7 @@ class ExportList {
 				if(files[0].reader.readyState == FileReader.EMPTY) {
 					files[0].reader.readAsDataURL(files[0].blob)
 				} else if(files[0].reader.readyState == FileReader.DONE) {
+					console.log(`Finished file read for ${files[0].path}`)
 					files.splice(0, 1)
 				}
 
@@ -273,13 +274,13 @@ class ExportList {
 		}).then(() => {
 			const extractExportParts = (...args) => {
 				const categories = [ ...args ]
-console.log(categories)
 
 				let result = ""
 				for(const category of categories) {
 					if(exportParts[category] == null) { continue }
 
 					for(const part of exportParts[category]) {
+						console.log(`Exporting file: ${part.exportPath}`)
 
 						// newlines and comments are meant to make checking the source html
 						// in the web browser debugger easier
