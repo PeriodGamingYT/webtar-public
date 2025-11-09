@@ -91,11 +91,8 @@ class FileTree {
 				"css", "CSS", "text/css",
 				textEditorInterface,
 				(dataUrl, bytes, mime, pathName) => {
-					const text = new TextDecoder().decode(bytes)
-
-					// be careful using </style> in css!
 					return (
-						`<style>${text}</style>`
+						`<link href="${dataUrl}" rel="stylesheet" type="text/css" />`
 					)
 				}
 			),
@@ -105,7 +102,7 @@ class FileTree {
 				textEditorInterface,
 				(dataUrl, bytes, mime, pathName) => {
 					return (
-						`<script src="${dataUrl}"></script>`
+						`<script src="${dataUrl}" type="text/javascript"></script>`
 					)
 				}
 			)
@@ -186,7 +183,11 @@ class FileTree {
 			const [treeDictKey, treeDictItem] of
 			Object.entries(this.treeDict)
 		) {
-			if(!treeDictItem.isFile) { continue }
+			if(
+				treeDictItem == null ||
+				!treeDictItem.isFile
+			) { continue }
+
 			const newTreeDictItem = {
 				fileIndex: filesSize,
 				exportItemIndex: null,

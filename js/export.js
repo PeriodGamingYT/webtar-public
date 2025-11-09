@@ -214,18 +214,7 @@ class ExportList {
 			}
 		}
 
-		this.exportResult = (
-			"<!doctype html>" +
-			"<html>" +
-				"<head>" +
-					`<title>${this.titleName}</title>` +
-					`<meta charset="UTF-8" />` +
-				"</head>" +
-
-				"<body>"
-		)
-
-		let exportParts = []
+		let exportParts = {}
 		let files = []
 		for(const itemIndex in this.items) {
 			const item = this.items[itemIndex]
@@ -239,15 +228,21 @@ class ExportList {
 
 			const fileReader = new FileReader()
 			fileReader.addEventListener("load", () => {
-				exportParts[itemIndex] = fileType.onExport(
-					fileReader.result,
-					file.data,
-					mime,
-					file.path
-				)
+				if(exportParts[fileType.name] == null) {
+					exportParts[fileType.name] = []
+				}
+
+				exportParts[fileType.name].push({
+					exportPath: file.path,
+					exportResult: fileType.onExport(
+						fileReader.result,
+						file.data,
+						mime,
+						file.path
+					)
+				})
 			})
 
-			exportParts.push(null)
 			files.push({
 				reader: fileReader,
 				blob: new Blob(
@@ -267,9 +262,7 @@ class ExportList {
 
 				if(files[0].reader.readyState == FileReader.EMPTY) {
 					files[0].reader.readAsDataURL(files[0].blob)
-				}
-
-				if(files[0].reader.readyState == FileReader.DONE) {
+				} else if(files[0].reader.readyState == FileReader.DONE) {
 					files.splice(0, 1)
 				}
 
@@ -278,13 +271,51 @@ class ExportList {
 
 			checkIfDone()
 		}).then(() => {
-			for(const part of exportParts) {
-				exportList.exportResult += part
+			const extractExportParts = (...args) => {
+				const categories = [ ...args ]
+console.log(categories)
+
+				let result = ""
+				for(const category of categories) {
+					if(exportParts[category] == null) { continue }
+
+					for(const part of exportParts[category]) {
+
+						// newlines and comments are meant to make checking the source html
+						// in the web browser debugger easier
+						result += (
+							`\n` +
+							`<!-- ${part.exportPath} -->\n` +
+							`${part.exportResult}\n`
+						)
+					}
+
+					exportParts[category] = null
+				}
+
+				return result
 			}
 
-			exportList.exportResult += (
-					"</body>" +
-				"</html>"
+			const extractRestOfExportParts = () => {
+				return extractExportParts(...Object.keys(exportParts))
+			}
+
+			// newlines are meant to make checking the source html
+			// in the web browser debugger easier
+			exportList.exportResult = (
+				"<!doctype html>\n" +
+				"<html>\n" +
+					"<head>\n" +
+						`<title>${exportList.titleName}</title>\n` +
+						`<meta charset="UTF-8" />\n` +
+						`${extractExportParts("css")}\n` +
+						`${extractExportParts("js")}\n` +
+					"</head>\n" +
+					"\n" +
+					"<body>\n" +
+						`${extractRestOfExportParts()}\n` +
+					"</body>\n" +
+				"</html>\n"
 			)
 
 			const blob = new Blob([
