@@ -198,7 +198,6 @@ class ExportList {
 	exportEverything() {
 		this.exportTextBlockElement.innerText = ""
 
-console.log(this.items)
 		for(const item of this.items) {
 			if(this.treeDict[item.path] == null) { continue }
 
@@ -241,7 +240,6 @@ console.log(this.items)
 				})
 			})
 
-			console.log(`Added file reader for ${file.path}`)
 			files.push({
 				reader: fileReader,
 				path: file.path,
@@ -263,7 +261,6 @@ console.log(this.items)
 				if(files[0].reader.readyState == FileReader.EMPTY) {
 					files[0].reader.readAsDataURL(files[0].blob)
 				} else if(files[0].reader.readyState == FileReader.DONE) {
-					console.log(`Finished file read for ${files[0].path}`)
 					files.splice(0, 1)
 				}
 
@@ -280,7 +277,6 @@ console.log(this.items)
 					if(exportParts[category] == null) { continue }
 
 					for(const part of exportParts[category]) {
-						console.log(`Exporting file: ${part.exportPath}`)
 
 						// newlines and comments are meant to make checking the source html
 						// in the web browser debugger easier
